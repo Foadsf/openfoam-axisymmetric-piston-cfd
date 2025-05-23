@@ -1,0 +1,151 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  5+                                   |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+convertToMeters 0.001;
+
+// Geometric parameters (hardcoded for compatibility)
+wa 0.0872665;  // 5 degrees in radians (5*pi/180)
+cr 10.0;       // cylinder radius [mm]
+pr 8.0;        // piston radius [mm]
+cl 50.0;       // cylinder length [mm]
+px 20.0;       // piston position [mm]
+pl 10.0;       // piston length [mm]
+px2 30.0;      // end of piston (px + pl)
+ms 20;         // mesh size
+
+vertices
+(
+    (0           0          0)     //00
+    (7.9692626   0.6975647  0)     //01 pr*cos(wa/2), pr*sin(wa/2)
+    (7.9692626  -0.6975647  0)     //02 pr*cos(wa/2), -pr*sin(wa/2)
+    (7.9692626  -0.6975647  20)    //03
+    (7.9692626   0.6975647  20)    //04
+    (0           0          20)    //05
+    (9.9615782   0.8719559  20)    //06 cr*cos(wa/2), cr*sin(wa/2)
+    (9.9615782   0.8719559  0)     //07
+    (9.9615782  -0.8719559  0)     //08
+    (9.9615782  -0.8719559  20)    //09
+    (9.9615782  -0.8719559  30)    //10
+    (9.9615782   0.8719559  30)    //11
+    (7.9692626   0.6975647  30)    //12
+    (7.9692626  -0.6975647  30)    //13
+    (7.9692626  -0.6975647  50)    //14
+    (7.9692626   0.6975647  50)    //15
+    (9.9615782   0.8719559  50)    //16
+    (9.9615782  -0.8719559  50)    //17
+    (0           0          50)    //18
+    (0           0          30)    //19
+);
+
+blocks
+(
+    hex (0  2  1  0  5  3  4  5)         (20 1 20) simpleGrading (1 1 1)
+    hex (1  2  8  7  4  3  9  6)         (1 1 20) simpleGrading (1 1 1)
+    hex (4  3  9  6  12 13 10 11)        (1 1 20) simpleGrading (1 1 1)
+    hex (12 13 10 11 15 14 17 16)        (1 1 20) simpleGrading (1 1 1)
+    hex (19 13 12 19 18 14 15 18)        (20 1 20) simpleGrading (1 1 1)
+);
+
+edges
+(
+);
+
+boundary
+(
+    inlet
+    {
+        type patch;
+        faces
+        (
+            (0 2 1 0)
+            (1 2 8 7)
+        );
+    }
+    
+    outlet
+    {
+        type patch;
+        faces
+        (
+            (18 15 14 18)
+            (15 16 17 14)
+        );
+    }
+    
+    walls
+    {
+        type wall;
+        faces
+        (
+            (7  8  9  6)
+            (6  9  10 11)
+            (11 10 17 16)
+        );
+    }
+    
+    piston
+    {
+        type wall;
+        faces
+        (
+            (5  4  3  5)
+            (12 13 3  4)
+            (19 13 12 19)
+        );
+    }
+    
+    wedgeFront
+    {
+        type wedge;
+        faces
+        (
+            (0  1  4  5)
+            (1  7  6  4)
+            (4  6  11 12)
+            (12 11 16 15)
+            (19 12 15 18)
+        );
+    }
+
+    wedgeBack
+    {
+        type wedge;
+        faces
+        (
+            (0  2  3  5)
+            (2  8  9  3)
+            (3  9  10 13)
+            (13 10 17 14)
+            (19 13 14 18)
+        );
+    }
+
+    axis
+    {
+        type empty;
+        faces
+        (
+            (0  5  5  0)
+            (19 18 18 19)
+        );
+    }
+);
+
+mergePatchPairs
+(
+);
+
+// ************************************************************************* //

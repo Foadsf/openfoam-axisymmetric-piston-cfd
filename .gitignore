@@ -1,0 +1,32 @@
+# OpenFOAM output files
+constant/polyMesh/
+processor*/
+*.foam
+[0-9]*/
+![0]/
+
+# Log files
+*.log
+*~
+
+# Backup files
+*.orig
+*.bak
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+tmp/
+temp/
+
+# Script files we want to keep
+!run_mwe.sh
+!find_openfoam.sh
