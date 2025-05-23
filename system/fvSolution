@@ -24,6 +24,12 @@ solvers
         smoother        GaussSeidel;
     }
 
+    pFinal
+    {
+        $p;
+        relTol          0;
+    }
+
     U
     {
         solver          smoothSolver;
@@ -55,6 +61,14 @@ relaxationFactors
     {
         U               0.7;
     }
+}
+
+PISO
+{
+    nCorrectors     2;
+    nNonOrthogonalCorrectors 0;
+    pRefCell        0;
+    pRefValue       0;
 }
 
 // ************************************************************************* //
